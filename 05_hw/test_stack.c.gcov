@@ -1,0 +1,175 @@
+        -:    0:Source:test_stack.c
+        -:    0:Graph:test_stack-test_stack.gcno
+        -:    0:Data:test_stack-test_stack.gcda
+        -:    0:Runs:1
+        -:    1:#include <stdio.h>
+        -:    2:#include <stdlib.h>
+        -:    3:#include <assert.h>
+        -:    4:#include "stack.h"
+        -:    5:
+        -:    6:
+        -:    7:// Тесты
+        1:    8:void test_initStack() {
+        -:    9:    Stack stack;
+        1:   10:    initStack(&stack);
+       1*:   11:    assert(stack.top == NULL);
+        1:   12:    printf("Test initStack passed.\n");
+        1:   13:}
+        -:   14:
+        1:   15:void test_createNode() {
+        1:   16:    Node* node = createNode(42);
+       1*:   17:    assert(node != NULL && node->data == 42 && node->next == NULL);
+        1:   18:    free(node);
+        1:   19:    printf("Test createNode passed.\n");
+        1:   20:}
+        -:   21:
+        1:   22:void test_push() {
+        -:   23:    Stack stack;
+        1:   24:    initStack(&stack);
+        -:   25:
+        1:   26:    push(&stack, 10);
+        1:   27:    push(&stack, 20);
+        1:   28:    push(&stack, 30);
+        -:   29:
+       1*:   30:    assert(stack.top != NULL);
+       1*:   31:    assert(stack.top->data == 30);
+       1*:   32:    assert(stack.top->next->data == 20);
+       1*:   33:    assert(stack.top->next->next->data == 10);
+        -:   34:
+        1:   35:    printf("Test push passed.\n");
+        1:   36:}
+        -:   37:
+        1:   38:void test_pop() {
+        -:   39:    Stack stack;
+        1:   40:    initStack(&stack);
+        -:   41:
+        1:   42:    push(&stack, 10);
+        1:   43:    push(&stack, 20);
+        -:   44:
+        1:   45:    pop(&stack);
+        -:   46:
+       1*:   47:    assert(stack.top != NULL);
+       1*:   48:    assert(stack.top->data == 10);
+        -:   49:
+        1:   50:    pop(&stack);
+        -:   51:
+       1*:   52:    assert(stack.top == NULL);
+        -:   53:
+        1:   54:    printf("Test pop passed.\n");
+        1:   55:}
+        -:   56:
+        1:   57:void test_searchByValue() {
+        -:   58:    Stack stack;
+        1:   59:    initStack(&stack);
+        -:   60:
+        1:   61:    push(&stack, 10);
+        1:   62:    push(&stack, 20);
+        1:   63:    push(&stack, 30);
+        -:   64:
+        1:   65:    Node* result = searchByValue(&stack, 20);
+       1*:   66:    assert(result != NULL);
+       1*:   67:    assert(result->data == 20);
+        -:   68:
+        1:   69:    result = searchByValue(&stack, 40);
+       1*:   70:    assert(result == NULL);
+        -:   71:
+        1:   72:    printf("Test searchByValue passed.\n");
+        1:   73:}
+        -:   74:
+        1:   75:void test_getTop() {
+        -:   76:    Stack stack;
+        1:   77:    initStack(&stack);
+        -:   78:
+        1:   79:    push(&stack, 10);
+        1:   80:    push(&stack, 20);
+        -:   81:
+        1:   82:    Node* topElement = getTop(&stack);
+       1*:   83:    assert(topElement != NULL);
+       1*:   84:    assert(topElement->data == 20);
+        -:   85:
+        1:   86:    pop(&stack);
+        1:   87:    topElement = getTop(&stack);
+       1*:   88:    assert(topElement != NULL);
+       1*:   89:    assert(topElement->data == 10);
+        -:   90:
+        1:   91:    printf("Test getTop passed.\n");
+        1:   92:}
+        -:   93:
+        1:   94:void test_traverseStack() {
+        -:   95:    Stack stack;
+        1:   96:    initStack(&stack);
+        -:   97:
+        1:   98:    push(&stack, 10);
+        1:   99:    push(&stack, 20);
+        1:  100:    push(&stack, 30);
+        -:  101:
+        1:  102:    traverseStack(&stack);
+        -:  103:
+        1:  104:    printf("Test traverseStack passed.\n");
+        1:  105:}
+        -:  106:
+        1:  107:void test_isEmpty() {
+        -:  108:    Stack stack;
+        1:  109:    initStack(&stack);
+        -:  110:
+       1*:  111:    assert(isEmpty(&stack) == true);
+        -:  112:
+        1:  113:    push(&stack, 10);
+       1*:  114:    assert(isEmpty(&stack) == false);
+        -:  115:
+        1:  116:    pop(&stack);
+       1*:  117:    assert(isEmpty(&stack) == true);
+        -:  118:
+        1:  119:    printf("Test isEmpty passed.\n");
+        1:  120:}
+        -:  121:
+        1:  122:void test_searchByIndex() {
+        -:  123:    Stack stack;
+        1:  124:    initStack(&stack);
+        1:  125:    push(&stack, 10);
+        1:  126:    push(&stack, 20);
+        1:  127:    push(&stack, 30);
+        -:  128:
+        1:  129:    Node* result = searchByIndex(&stack, 1);
+       1*:  130:    assert(result != NULL && result->data == 20); // Элемент по индексу 1 найден
+        -:  131:
+        1:  132:    result = searchByIndex(&stack, 0);
+       1*:  133:    assert(result != NULL && result->data == 30); // Элемент по индексу 0 найден
+        -:  134:
+        1:  135:    result = searchByIndex(&stack, 5);
+       1*:  136:    assert(result == NULL); // Индекс вне пределов
+        -:  137:
+        -:  138:    // Проверка на пустом стеке
+        -:  139:    Stack emptyStack;
+        1:  140:    initStack(&emptyStack);
+        1:  141:    result = searchByIndex(&emptyStack, 0);
+       1*:  142:    assert(result == NULL);
+        1:  143:    printf("Test search_by_index passed\n");
+        1:  144:    destroyStack(&stack);
+        1:  145:}
+        -:  146:
+        1:  147:void test_DestroyStack() {
+        -:  148:    Stack stack;
+        1:  149:    initStack(&stack);
+        1:  150:    push(&stack, 10);
+        1:  151:    push(&stack, 20);
+        1:  152:    destroyStack(&stack);
+       1*:  153:    assert(stack.top == NULL); // После уничтожения вершина должна быть NULL
+        1:  154:    printf("Test destroy_stack passed\n");
+        1:  155:}
+        -:  156:
+        1:  157:int main() {
+        1:  158:    test_createNode();
+        1:  159:    test_initStack();
+        1:  160:    test_push();
+        1:  161:    test_pop();
+        1:  162:    test_searchByValue();
+        1:  163:    test_searchByIndex();
+        1:  164:    test_DestroyStack();
+        1:  165:    test_getTop();
+        1:  166:    test_traverseStack();
+        1:  167:    test_isEmpty();
+        -:  168:
+        1:  169:    printf("All tests passed!\n");
+        1:  170:    return 0;
+        -:  171:}
