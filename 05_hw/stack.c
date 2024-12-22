@@ -17,10 +17,11 @@ void initStack(Stack* stack) {
 void destroyStack(Stack* stack) {
     Node* current = stack->top;
     while (current != NULL) {
-        Node *tmp = current;
+        Node* tmp = current;
         current = current->next;
-	    free(tmp);
+        free(tmp);
     }
+    stack->top = NULL; // Убедимся, что указатель на вершину обнулен
 }
 
 void push(Stack* stack, int data) {
@@ -30,8 +31,13 @@ void push(Stack* stack, int data) {
 }
 
 void pop(Stack* stack) {
+    if (stack->top == NULL) {
+        fprintf(stderr, "Stack underflow\n");
+        return;
+    }
     Node* temp = stack->top;
     stack->top = stack->top->next;
+    free(temp); // Освобождаем память узла
 }
 
 Node* searchByValue(Stack* stack, int value) {
@@ -40,6 +46,7 @@ Node* searchByValue(Stack* stack, int value) {
         if (current->data == value) {
             return current;
         }
+        current = current->next; // Переход к следующему узлу
     }
     return NULL;
 }
@@ -72,7 +79,5 @@ void traverseStack(Stack* stack) {
 }
 
 bool isEmpty(Stack* stack) {
-    free(stack->top);
     return stack->top == NULL;
 }
-
