@@ -62,7 +62,7 @@ void test_searchByValue() {
     push(&stack, 20);
     push(&stack, 30);
 
-    Node* result = searchByValue(&stack, 20);
+    const Node* result = searchByValue(&stack, 20);
     assert(result != NULL);
     assert(result->data == 20);
 
@@ -79,7 +79,7 @@ void test_getTop() {
     push(&stack, 10);
     push(&stack, 20);
 
-    Node* topElement = getTop(&stack);
+    const Node* topElement = getTop(&stack);
     assert(topElement != NULL);
     assert(topElement->data == 20);
 
@@ -126,7 +126,7 @@ void test_searchByIndex() {
     push(&stack, 20);
     push(&stack, 30);
 
-    Node* result = searchByIndex(&stack, 1);
+    const Node* result = searchByIndex(&stack, 1);
     assert(result != NULL && result->data == 20); // Ёлемент по индексу 1 найден
 
     result = searchByIndex(&stack, 0);
