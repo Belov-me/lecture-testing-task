@@ -9,3 +9,6 @@ target_link_libraries(main stack)
 
 add_executable(test_stack test_stack.c)
 target_link_libraries(test_stack stack)
+
+add_executable(benchmark benchmark.c)
+target_link_libraries(benchmark stack)
